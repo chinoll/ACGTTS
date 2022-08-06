@@ -7,9 +7,14 @@
 ```
 
 # 用法
+在使用之前请先安装espeak
 ```
+pip install -r requirements.txt
 python gen_audio.py --text you text --sid 0
 ```
 
 # 模型下载地址
 [huggingface](https://huggingface.co/chinoll/ACGTTS)
+
+# 微调
+TODO
