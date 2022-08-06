@@ -7,9 +7,12 @@
 ```
 
 # 用法
-在使用之前请先安装espeak
-去下载模型放入models目录
+在使用之前请先安装espeak <br>
+下载模型放入models目录
 ```
+cd vits/monotonic_align
+mkdir monotonic_align
+python setup.py build_ext --inplace
 pip install -r requirements.txt
 python gen_audio.py --text you text --sid 0 --model models/*.pth
 ```
