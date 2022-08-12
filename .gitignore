@@ -1,3 +1,4 @@
 models/
 ACGTTS/
 *.wav
+vits/monotonic_align
