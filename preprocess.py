@@ -3,7 +3,7 @@ from vits.utils import load_filepaths_and_text
 import vits.text as text
 import argparse
 
-clearlist = ['%','... ... ...','(',')','[',']','\ n','-','~','"','*','&','... ...','●','・','♪','“','… … …']
+clearlist = ['%','... ... ...','(',')','[',']','\ n','-','~','"','*','&','... ...','●','・','♪','“','… … …','{','}','+']
 replacedict = {'1':'iti','2':'ni','3':'san','4':'si','5':'go','6':'roku','7':'siti','8':'hati','9':'kyujuu','0':'jyuu','…':' '}
 def filter_text(text):
     for x in replacedict:
@@ -33,7 +33,10 @@ if __name__ == '__main__':
             original_text = filepaths_and_text[i][2]
             if filter_NSFW_audio(original_text):
                 original_text = ''
-
+            result = kakasi.convert(' '.join(list(original_text.replace("「","").replace("」",""))))
+            
+            original_text = ' '.join([i['kana'] for i in result])
+            # print(cleaned_text)
             cleaned_text = text._clean_text(original_text, ["transliteration_cleaners"])
 
             cleaned_text = filter_text(cleaned_text)
