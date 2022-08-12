@@ -20,5 +20,7 @@ python gen_audio.py --text you text --sid 0 --model models/*.pth
 # 模型下载地址
 [huggingface](https://huggingface.co/chinoll/ACGTTS)
 
-# 微调
-TODO
+# TODO
+- [ ] 微调代码
+- [ ] 训练效率改进
+- [ ] 更简单的UI
