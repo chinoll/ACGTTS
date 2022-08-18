@@ -12,6 +12,7 @@ import os
 import requests
 import math
 import tqdm
+from pykakasi import kakasi
 
 def get_text(text, hps):
     text_norm = text_to_sequence(text, hps.data.text_cleaners)
@@ -20,7 +21,7 @@ def get_text(text, hps):
     text_norm = torch.LongTensor(text_norm)
     return text_norm
 
-def download_model(model_url='https://huggingface.co/chinoll/ACGTTS/resolve/main/acg_base/38000.pth',model_name='38000.pth'):
+def download_model(model_url='https://huggingface.co/chinoll/ACGTTS/resolve/main/new/acg_base/246000.pth',model_name='246000.pth'):
     if not os.path.exists('models'):
         os.makedirs('models')
     if os.path.exists(f'models/{model_name}'):
@@ -41,6 +42,8 @@ if __name__ == "__main__":
     parse.add_argument("-o", "--output", default="test.wav", type=str, help="output wav file path")
     parse.add_argument("--sid",default=0, type=int, help="SID of the character")
     parse.add_argument("--cuda",default=False, action="store_true", help="use cuda")
+    parse.add_argument("--zh",default=False, action="store_true", help="use chinese language")
+    parse.add_argument("--old",default=False, action="store_true", help="use old model")
     args = parse.parse_args()
     hps = utils.get_hparams_from_file(args.config)
 
@@ -58,7 +61,17 @@ if __name__ == "__main__":
         model_path = args.model
 
     net_g.load_state_dict(torch.load(model_path,map_location='cpu'))
-    cleanned_text = text._clean_text(' '.join([i for i in list(args.text) if i != ' ']), ['transliteration_cleaners'])
+
+    if args.old:
+        cleanned_text = text._clean_text(' '.join([i for i in list(args.text) if i != ' ']), ['transliteration_cleaners'])
+    else:
+        if not args.zh:
+            result = kakasi.convert(' '.join(list(args.text)))
+            cleanned_text = ' '.join([i['kana'] for i in result])
+        else:
+            cleanned_text = args.text
+        text._clean_text(cleanned_text, ['transliteration_cleaners'])
+
     stn_tst = get_text(cleanned_text, hps)
     with torch.no_grad():
         x_tst = stn_tst.cuda().unsqueeze(0) if args.cuda else stn_tst.unsqueeze(0)

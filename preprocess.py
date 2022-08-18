@@ -24,6 +24,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--out_extension", default="cleaned")
     parser.add_argument("--filelists", nargs="+", default=['audio.txt'])
+    parser.add_argument("--zh", default=False,action="store_true",help="change language to zh")
     args = parser.parse_args()
     kakasi = kakasi()
 
@@ -31,23 +32,25 @@ if __name__ == '__main__':
         filepaths_and_text = load_filepaths_and_text(filelist)
         for i in range(len(filepaths_and_text)):
             original_text = filepaths_and_text[i][2]
-            if filter_NSFW_audio(original_text):
-                original_text = ''
-            result = kakasi.convert(' '.join(list(original_text.replace("「","").replace("」",""))))
+            if not args.zh:
+                if filter_NSFW_audio(original_text):
+                    original_text = ''
+                result = kakasi.convert(' '.join(list(original_text.replace("「","").replace("」",""))))
             
-            original_text = ' '.join([i['kana'] for i in result])
+                original_text = ' '.join([i['kana'] for i in result])
             # print(cleaned_text)
             cleaned_text = text._clean_text(original_text, ["transliteration_cleaners"])
-
             cleaned_text = filter_text(cleaned_text)
-            if len(cleaned_text.replace(" ","")) == 0:
-                original_text = ''
-            while cleaned_text.find('  ') != -1:
-                cleaned_text = cleaned_text.replace("  "," ")
-            try:
-                cleaned_text = cleaned_text if cleaned_text[0] != ' ' else cleaned_text[1:]
-            except:
-                original_text = ''
+
+            if not args.zh:
+                if len(cleaned_text.replace(" ","")) == 0:
+                    cleaned_text = ''
+                while cleaned_text.find('  ') != -1:
+                    cleaned_text = cleaned_text.replace("  "," ")
+                try:
+                    cleaned_text = cleaned_text if cleaned_text[0] != ' ' else cleaned_text[1:]
+                except:
+                    cleaned_text = ''
 
             filepaths_and_text[i][2] = cleaned_text
 
