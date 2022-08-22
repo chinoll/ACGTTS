@@ -25,6 +25,7 @@ if __name__ == '__main__':
     parser.add_argument("--out_extension", default="cleaned")
     parser.add_argument("--filelists", nargs="+", default=['audio.txt'])
     parser.add_argument("--zh", default=False,action="store_true",help="change language to zh")
+    parser.add_argument("--old",default=False, action="store_true")
     args = parser.parse_args()
     kakasi = kakasi()
 
@@ -35,10 +36,12 @@ if __name__ == '__main__':
             if not args.zh:
                 if filter_NSFW_audio(original_text):
                     original_text = ''
-                result = kakasi.convert(' '.join(list(original_text.replace("「","").replace("」",""))))
+                if args.old:
+                    result = kakasi.convert(' '.join(list(original_text.replace("「","").replace("」",""))))
+                else:
+                    result = kakasi.convert(''.join(list(original_text.replace("「","").replace("」",""))))
             
                 original_text = ' '.join([i['kana'] for i in result])
-            # print(cleaned_text)
             cleaned_text = text._clean_text(original_text, ["transliteration_cleaners"])
             cleaned_text = filter_text(cleaned_text)
 
@@ -50,6 +53,13 @@ if __name__ == '__main__':
                 try:
                     cleaned_text = cleaned_text if cleaned_text[0] != ' ' else cleaned_text[1:]
                 except:
+                    cleaned_text = ''
+
+            if cleaned_text != '':
+                z = cleaned_text
+                for j in ['.','?','!',',']:
+                    z = z.replace(j,"")
+                if len(z) == 0:
                     cleaned_text = ''
 
             filepaths_and_text[i][2] = cleaned_text
