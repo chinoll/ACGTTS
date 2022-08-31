@@ -3,8 +3,8 @@ from vits.utils import load_filepaths_and_text
 import vits.text as text
 import argparse
 
-clearlist = ['%','... ... ...','(',')','[',']','\ n','-','~','"','*','&','... ...','●','・','♪','“','… … …','{','}','+']
-replacedict = {'1':'iti','2':'ni','3':'san','4':'si','5':'go','6':'roku','7':'siti','8':'hati','9':'kyujuu','0':'jyuu','…':' '}
+clearlist = ['%','... ... ...','(',')','[',']','\ n','-','~','"','*','&','... ...','●','・','♪','“','… … …','{','}','+','/','>']
+replacedict = {'1':'iti','2':'ni','3':'san','4':'si','5':'go','6':'roku','7':'siti','8':'hati','9':'kyujuu','0':'jyuu','…':' ','^':' '}
 def filter_text(text):
     for x in replacedict:
         text = text.replace(x,replacedict[x])
