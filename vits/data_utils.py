@@ -198,6 +198,7 @@ class TextAudioSpeakerLoader(torch.utils.data.Dataset):
         text = self.get_text(text)
         spec, wav = self.get_audio(audiopath)
         sid = self.get_sid(sid)
+        print(text,spec,wav,sid)
         return (text, spec, wav, sid)
 
     def get_audio(self, filename):
@@ -290,6 +291,7 @@ class TextAudioSpeakerCollate():
 
         if self.return_ids:
             return text_padded, text_lengths, spec_padded, spec_lengths, wav_padded, wav_lengths, sid, ids_sorted_decreasing
+        print(spec_padded.shape, spec_lengths.shape,spec_lengths,spec.shape,spec.size(1))
         return text_padded, text_lengths, spec_padded, spec_lengths, wav_padded, wav_lengths, sid
 
 

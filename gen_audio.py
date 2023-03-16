@@ -58,14 +58,14 @@ if __name__ == "__main__":
     net_g = net_g.cuda() if args.cuda else net_g
     _ = net_g.eval()
     if args.model == None:
-        model_jp_path = download_model(jpurl,jpurl.split("/")[-1])
+        model_path = download_model(jpurl,jpurl.split("/")[-1])
         if args.zh:
             model_zh_path = download_model(zhurl,zhurl.split("/")[-1])
     else:
         model_path = args.model
         model_zh_path = 'zh_323000.pth'
 
-    net_g.load_state_dict(torch.load(model_jp_path,map_location='cpu'))
+    net_g.load_state_dict(torch.load(model_path,map_location='cpu'))
     if args.old:
         cleanned_text = text._clean_text(' '.join([i for i in list(args.text) if i != ' ']), ['transliteration_cleaners'])
     else:
@@ -81,7 +81,8 @@ if __name__ == "__main__":
 
             cleanned_text = args.text
         else:
-            result = kakasi.convert(args.text)
+            kks = kakasi()
+            result = kks.convert(args.text)
             cleanned_text = ' '.join([i['kana'] for i in result])
         text._clean_text(cleanned_text, ['transliteration_cleaners'])
 

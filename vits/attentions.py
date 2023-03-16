@@ -8,7 +8,6 @@ from torch.nn import functional as F
 import vits.commons as commons
 import vits.modules as modules
 from vits.modules import LayerNorm
-   
 
 class Encoder(nn.Module):
   def __init__(self, hidden_channels, filter_channels, n_heads, n_layers, kernel_size=1, p_dropout=0., window_size=4, **kwargs):

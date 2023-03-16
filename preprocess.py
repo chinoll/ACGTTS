@@ -63,7 +63,8 @@ if __name__ == '__main__':
                     cleaned_text = ''
 
             filepaths_and_text[i][2] = cleaned_text
-
+            filepaths_and_text[i][1] = str(int(filepaths_and_text[i][1]) + 30)
         new_filelist = filelist + "." + args.out_extension
         with open(new_filelist, "w", encoding="utf-8") as f:
+            # print(filepaths_and_text[i])
             f.writelines(["|".join(x) + "\n" for x in filepaths_and_text if x[2] != ""])
